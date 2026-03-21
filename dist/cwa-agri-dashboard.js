@@ -1,7 +1,7 @@
 class CwaAgriReportCard extends HTMLElement {
   setConfig(config) {
     this.config = {
-      entity: 'input_text.cwa_agri_report',
+      entity: 'sensor.cwa_agri_report',
       title: '農業氣象報告',
       days: 5,
       ...config,

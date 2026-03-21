@@ -4,7 +4,7 @@ HACS custom card for OpenClaw / Home Assistant agricultural weather reports.
 
 This card is designed for the entity pushed by the OpenClaw CWA skill, typically:
 
-- `input_text.cwa_agri_report`
+- `sensor.cwa_agri_report`
 
 ## Features
 
@@ -30,7 +30,7 @@ This card is designed for the entity pushed by the OpenClaw CWA skill, typically
 
 ```yaml
 type: custom:cwa-agri-report-card
-entity: input_text.cwa_agri_report
+entity: sensor.cwa_agri_report
 title: 藍莓農場氣象儀表板
 ```
 
@@ -40,7 +40,7 @@ title: 藍莓農場氣象儀表板
 type: vertical-stack
 cards:
   - type: custom:cwa-agri-report-card
-    entity: input_text.cwa_agri_report
+    entity: sensor.cwa_agri_report
     title: 呼密·藍莓農場
 ```
 
