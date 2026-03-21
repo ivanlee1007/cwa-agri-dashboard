@@ -12,7 +12,8 @@ This card is designed for the entity pushed by the OpenClaw CWA skill, typically
 - Operation guidance
 - 3-day action window
 - Weekly focus / highest-risk-day / management advice
-- 7-day forecast responsive layout（桌面表格 / 窄版自動改列表）
+- Card-style daily / weekly summary blocks
+- 7-day forecast responsive tiles（不再依賴 Markdown 表格）
 - Note section for rule-based monitoring items
 
 ## Install with HACS
