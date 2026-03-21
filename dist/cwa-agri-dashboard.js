@@ -2,7 +2,7 @@ class CwaAgriReportCard extends HTMLElement {
   setConfig(config) {
     this.config = {
       entity: 'sensor.cwa_agri_report',
-      title: '農業氣象報告 v4',
+      title: '農業氣象報告 v5',
       days: 7,
       ...config,
     };
@@ -135,91 +135,8 @@ class CwaAgriReportCard extends HTMLElement {
     const hasWarning = Boolean(bannerText);
     const currentSummary = [fs.headline, fs.weather].filter(Boolean).join('｜');
 
-    this.innerHTML = `
-      <ha-card header="${this._esc(this.config.title)}">
-        <div class="card">
-          <div class="hero-card">
-            <div class="hero-main">
-              <div class="hero-title-row">
-                <div class="hero-title">${this._esc(a.risk_icon || '🌱')} ${this._esc(a.farm_name || '農場')}</div>
-                <div class="build-tag">v4 · build ui-refresh</div>
-              </div>
-              <div class="hero-sub">${this._esc(a.crop_name || '-')}｜${this._esc(a.date || '-')}</div>
-              <div class="chip-row">${statusChips}</div>
-            </div>
-            <div class="hero-side">
-              <div class="hero-temp">${this._esc(a.temp_min ?? '-')}° ~ ${this._esc(a.temp_max ?? '-')}°</div>
-              <div class="hero-weather">${this._esc(a.current_weather || '-')}</div>
-              <div class="hero-issued">更新：${this._esc(this._fmtIssued(a.issued_at || '-'))}</div>
-            </div>
-          </div>
-
-          <div class="alert-banner ${hasWarning ? 'warn' : 'ok'}">
-            <div class="alert-title">${hasWarning ? '⚠️ 目前提醒' : '✅ 今日狀態'}</div>
-            <div class="alert-text">${this._esc(hasWarning ? bannerText : '目前沒有額外即時警報，可照排程作業')}</div>
-            ${fs.tonight_warning_note ? `<div class="alert-sub">${this._esc(fs.tonight_warning_note)}</div>` : ''}
-          </div>
-
-          <div class="grid two">
-            ${this._sectionCard('今日判讀', this._renderInfoRows([
-              currentSummary ? { label: '整體', value: currentSummary } : null,
-              { label: '天氣', value: `${a.current_weather || '-'}｜${a.temp_min ?? '-'}°C ~ ${a.temp_max ?? '-'}°C` },
-              fs.risk_interpretation ? { label: '判讀', value: fs.risk_interpretation } : (a.risk_interpretation ? { label: '判讀', value: a.risk_interpretation } : null),
-            ]))}
-
-            ${this._sectionCard('今日作業', this._renderInfoRows([
-              fs.work_window ? { label: '巡田', value: fs.work_window } : null,
-              fs.fertilizing_advice ? { label: '施肥', value: fs.fertilizing_advice } : null,
-              fs.spraying_advice ? { label: '噴藥', value: fs.spraying_advice } : null,
-              fs.irrigation_advice ? { label: '灌溉', value: fs.irrigation_advice } : null,
-            ]))}
-          </div>
-
-          <div class="grid two">
-            ${this._sectionCard('優先動作', this._renderBulletList(warningActions, '今日無特別優先處置'))}
-            ${this._sectionCard('近 3 天窗口', this._renderBulletList(next3, '暫無資料'))}
-          </div>
-
-          <div class="grid two">
-            ${this._sectionCard('生長狀態', this._renderInfoRows([
-              a.risk_text ? { label: '風險說明', value: a.risk_text } : null,
-              a.gdd_today !== undefined ? { label: '本日度日', value: `${a.gdd_today} GDD` } : null,
-              a.gdd_accumulated !== undefined ? { label: '累計積溫', value: `${a.gdd_accumulated} GDD` } : null,
-              a.gdd_progress ? { label: '進度', value: a.gdd_progress } : null,
-            ]))}
-            ${this._sectionCard('生長期建議', this._renderBulletList(stageAdvice, '暫無額外建議'))}
-          </div>
-
-          <div class="grid two">
-            ${this._sectionCard('本週重點', this._renderInfoRows([
-              highestRiskDay ? { label: '最高風險日', value: highestRiskDay.summary || highestRiskDay.reason || highestRiskDay } : null,
-              weeklyActionFocus.length ? { label: '作業焦點', value: weeklyActionFocus.join('；') } : null,
-              weeklyManagementAdvice.length ? { label: '管理建議', value: weeklyManagementAdvice.join('；') } : null,
-            ]))}
-            ${this._sectionCard('風險來源', this._renderBulletList(riskDrivers, '暫無顯著風險來源'))}
-          </div>
-
-          ${liveAlertActions.length ? this._sectionCard('即時警報動作', this._renderBulletList(liveAlertActions)) : ''}
-
-          ${this._sectionCard('7 天預報', `
-            <div class="forecast-summary">${this._esc(trend)}</div>
-            ${this._renderForecastCards(weekly)}
-          `)}
-
-          ${note.monitoring_items_text || note.monitoring_risks_text ? `
-            <section class="section-card note-card">
-              <div class="section-title">附註說明</div>
-              ${note.monitoring_risks_text ? `<div class="note-line">${this._esc(note.monitoring_risks_text)}</div>` : ''}
-              ${note.monitoring_items_text ? `<div class="note-line">${this._esc(note.monitoring_items_text)}</div>` : ''}
-            </section>
-          ` : ''}
-        </div>
-      </ha-card>
-    `;
-
-    if (!this._styled) {
-      const style = document.createElement('style');
-      style.textContent = `
+    const styles = `
+      <style>
         ha-card { display:block; }
         .card { padding: 16px; }
         .pad { padding: 16px; }
@@ -358,10 +275,91 @@ class CwaAgriReportCard extends HTMLElement {
             text-align:left;
           }
         }
-      `;
-      this.appendChild(style);
-      this._styled = true;
-    }
+      </style>
+    `;
+
+    this.innerHTML = `
+      ${styles}
+      <ha-card header="${this._esc(this.config.title)}">
+        <div class="card">
+          <div class="hero-card">
+            <div class="hero-main">
+              <div class="hero-title-row">
+                <div class="hero-title">${this._esc(a.risk_icon || '🌱')} ${this._esc(a.farm_name || '農場')}</div>
+                <div class="build-tag">v5 · build css-fix</div>
+              </div>
+              <div class="hero-sub">${this._esc(a.crop_name || '-')}｜${this._esc(a.date || '-')}</div>
+              <div class="chip-row">${statusChips}</div>
+            </div>
+            <div class="hero-side">
+              <div class="hero-temp">${this._esc(a.temp_min ?? '-')}° ~ ${this._esc(a.temp_max ?? '-')}°</div>
+              <div class="hero-weather">${this._esc(a.current_weather || '-')}</div>
+              <div class="hero-issued">更新：${this._esc(this._fmtIssued(a.issued_at || '-'))}</div>
+            </div>
+          </div>
+
+          <div class="alert-banner ${hasWarning ? 'warn' : 'ok'}">
+            <div class="alert-title">${hasWarning ? '⚠️ 目前提醒' : '✅ 今日狀態'}</div>
+            <div class="alert-text">${this._esc(hasWarning ? bannerText : '目前沒有額外即時警報，可照排程作業')}</div>
+            ${fs.tonight_warning_note ? `<div class="alert-sub">${this._esc(fs.tonight_warning_note)}</div>` : ''}
+          </div>
+
+          <div class="grid two">
+            ${this._sectionCard('今日判讀', this._renderInfoRows([
+              currentSummary ? { label: '整體', value: currentSummary } : null,
+              { label: '天氣', value: `${a.current_weather || '-'}｜${a.temp_min ?? '-'}°C ~ ${a.temp_max ?? '-'}°C` },
+              fs.risk_interpretation ? { label: '判讀', value: fs.risk_interpretation } : (a.risk_interpretation ? { label: '判讀', value: a.risk_interpretation } : null),
+            ]))}
+
+            ${this._sectionCard('今日作業', this._renderInfoRows([
+              fs.work_window ? { label: '巡田', value: fs.work_window } : null,
+              fs.fertilizing_advice ? { label: '施肥', value: fs.fertilizing_advice } : null,
+              fs.spraying_advice ? { label: '噴藥', value: fs.spraying_advice } : null,
+              fs.irrigation_advice ? { label: '灌溉', value: fs.irrigation_advice } : null,
+            ]))}
+          </div>
+
+          <div class="grid two">
+            ${this._sectionCard('優先動作', this._renderBulletList(warningActions, '今日無特別優先處置'))}
+            ${this._sectionCard('近 3 天窗口', this._renderBulletList(next3, '暫無資料'))}
+          </div>
+
+          <div class="grid two">
+            ${this._sectionCard('生長狀態', this._renderInfoRows([
+              a.risk_text ? { label: '風險說明', value: a.risk_text } : null,
+              a.gdd_today !== undefined ? { label: '本日度日', value: `${a.gdd_today} GDD` } : null,
+              a.gdd_accumulated !== undefined ? { label: '累計積溫', value: `${a.gdd_accumulated} GDD` } : null,
+              a.gdd_progress ? { label: '進度', value: a.gdd_progress } : null,
+            ]))}
+            ${this._sectionCard('生長期建議', this._renderBulletList(stageAdvice, '暫無額外建議'))}
+          </div>
+
+          <div class="grid two">
+            ${this._sectionCard('本週重點', this._renderInfoRows([
+              highestRiskDay ? { label: '最高風險日', value: highestRiskDay.summary || highestRiskDay.reason || highestRiskDay } : null,
+              weeklyActionFocus.length ? { label: '作業焦點', value: weeklyActionFocus.join('；') } : null,
+              weeklyManagementAdvice.length ? { label: '管理建議', value: weeklyManagementAdvice.join('；') } : null,
+            ]))}
+            ${this._sectionCard('風險來源', this._renderBulletList(riskDrivers, '暫無顯著風險來源'))}
+          </div>
+
+          ${liveAlertActions.length ? this._sectionCard('即時警報動作', this._renderBulletList(liveAlertActions)) : ''}
+
+          ${this._sectionCard('7 天預報', `
+            <div class="forecast-summary">${this._esc(trend)}</div>
+            ${this._renderForecastCards(weekly)}
+          `)}
+
+          ${note.monitoring_items_text || note.monitoring_risks_text ? `
+            <section class="section-card note-card">
+              <div class="section-title">附註說明</div>
+              ${note.monitoring_risks_text ? `<div class="note-line">${this._esc(note.monitoring_risks_text)}</div>` : ''}
+              ${note.monitoring_items_text ? `<div class="note-line">${this._esc(note.monitoring_items_text)}</div>` : ''}
+            </section>
+          ` : ''}
+        </div>
+      </ha-card>
+    `;
   }
 }
 
