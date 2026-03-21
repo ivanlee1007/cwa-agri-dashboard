@@ -2,7 +2,7 @@ class CwaAgriReportCard extends HTMLElement {
   setConfig(config) {
     this.config = {
       entity: 'sensor.cwa_agri_report',
-      title: '農業氣象報告',
+      title: '農業氣象報告 v3',
       days: 5,
       ...config,
     };
@@ -80,6 +80,7 @@ class CwaAgriReportCard extends HTMLElement {
           <div class="hero">
             <div class="hero-title">${this._esc(a.risk_icon || '🌱')} ${this._esc(a.farm_name || '農場')}｜${this._esc(a.crop_name || '-')}</div>
             <div class="hero-sub">${this._esc(a.date || '-')}</div>
+            <div class="build-tag">CWA Agri Dashboard build 967-test</div>
           </div>
 
           <div class="banner ${fs.warning_headline ? 'warn' : 'ok'}">
@@ -195,6 +196,7 @@ class CwaAgriReportCard extends HTMLElement {
         .card { padding: 16px; }
         .hero-title { font-size: 1.15rem; font-weight: 700; }
         .hero-sub, .muted, .footer { color: var(--secondary-text-color); }
+        .build-tag { display:inline-block; margin-top:8px; padding:4px 8px; border-radius:999px; background: rgba(33, 150, 243, 0.14); color: var(--primary-color); font-size: .78rem; font-weight: 700; }
         .banner { margin: 12px 0; padding: 10px 12px; border-radius: 12px; font-weight: 600; }
         .banner.ok { background: rgba(56, 142, 60, 0.12); }
         .banner.warn { background: rgba(245, 124, 0, 0.12); }
