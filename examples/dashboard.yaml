@@ -1,0 +1,9 @@
+title: CWA Agri Dashboard
+views:
+  - title: 農場氣象
+    path: cwa-agri
+    icon: mdi:sprout
+    cards:
+      - type: custom:cwa-agri-report-card
+        entity: input_text.cwa_agri_report
+        title: 呼密·藍莓農場

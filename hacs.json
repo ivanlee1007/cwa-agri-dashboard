@@ -1,0 +1,7 @@
+{
+  "name": "CWA Agri Dashboard",
+  "content_in_root": false,
+  "render_readme": true,
+  "country": ["TW"],
+  "homeassistant": "2024.1.0"
+}
