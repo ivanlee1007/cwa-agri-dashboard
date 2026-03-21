@@ -2,7 +2,7 @@ class CwaAgriReportCard extends HTMLElement {
   setConfig(config) {
     this.config = {
       entity: 'sensor.cwa_agri_report',
-      title: '農業氣象報告 v5',
+      title: '農業氣象報告 v5.1',
       days: 7,
       ...config,
     };
@@ -138,7 +138,7 @@ class CwaAgriReportCard extends HTMLElement {
     const styles = `
       <style>
         ha-card { display:block; }
-        .card { padding: 16px; }
+        .card { padding: 18px; font-size: 15px; line-height: 1.65; }
         .pad { padding: 16px; }
         .muted { color: var(--secondary-text-color); }
         .hero-card {
@@ -156,16 +156,16 @@ class CwaAgriReportCard extends HTMLElement {
           justify-content:space-between;
           gap:12px;
         }
-        .hero-title { font-size: 1.2rem; font-weight: 800; }
-        .hero-sub, .hero-issued { color: var(--secondary-text-color); margin-top: 6px; }
+        .hero-title { font-size: 1.28rem; font-weight: 800; line-height: 1.35; }
+        .hero-sub, .hero-issued { color: var(--secondary-text-color); margin-top: 8px; font-size: .95rem; }
         .hero-side {
           padding: 12px;
           border-radius: 14px;
           background: rgba(255,255,255,.42);
           text-align: right;
         }
-        .hero-temp { font-size: 1.25rem; font-weight: 800; }
-        .hero-weather { margin-top: 6px; font-weight: 600; }
+        .hero-temp { font-size: 1.35rem; font-weight: 800; line-height: 1.3; }
+        .hero-weather { margin-top: 8px; font-weight: 600; font-size: 1rem; }
         .build-tag {
           display:inline-block;
           padding:4px 10px;
@@ -225,25 +225,25 @@ class CwaAgriReportCard extends HTMLElement {
           box-shadow: inset 0 0 0 1px rgba(127,127,127,0.12);
         }
         .section-title {
-          font-size: .96rem;
+          font-size: 1.02rem;
           font-weight: 800;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
         .bullet-list {
           margin: 0;
           padding-left: 18px;
         }
-        .bullet-list li { margin: 6px 0; }
+        .bullet-list li { margin: 8px 0; }
         .info-row {
           display:grid;
-          grid-template-columns: 78px 1fr;
-          gap: 10px;
-          padding: 8px 0;
+          grid-template-columns: 88px 1fr;
+          gap: 12px;
+          padding: 10px 0;
           border-bottom: 1px solid rgba(127,127,127,0.12);
         }
         .info-row:last-child { border-bottom: none; padding-bottom: 0; }
         .info-label { color: var(--secondary-text-color); font-weight: 700; }
-        .info-value { line-height: 1.5; }
+        .info-value { line-height: 1.75; word-break: break-word; }
         .forecast-summary {
           color: var(--secondary-text-color);
           margin-bottom: 10px;
@@ -254,7 +254,7 @@ class CwaAgriReportCard extends HTMLElement {
           gap: 10px;
         }
         .forecast-card {
-          padding: 12px;
+          padding: 14px 12px;
           border-radius: 14px;
           background: var(--secondary-background-color);
           text-align:center;
@@ -274,6 +274,8 @@ class CwaAgriReportCard extends HTMLElement {
           .hero-side {
             text-align:left;
           }
+          .card { padding: 16px; font-size: 15px; }
+          .info-row { grid-template-columns: 80px 1fr; gap: 10px; }
         }
       </style>
     `;
@@ -286,7 +288,7 @@ class CwaAgriReportCard extends HTMLElement {
             <div class="hero-main">
               <div class="hero-title-row">
                 <div class="hero-title">${this._esc(a.risk_icon || '🌱')} ${this._esc(a.farm_name || '農場')}</div>
-                <div class="build-tag">v5 · build css-fix</div>
+                <div class="build-tag">v5.1 · build type-tune</div>
               </div>
               <div class="hero-sub">${this._esc(a.crop_name || '-')}｜${this._esc(a.date || '-')}</div>
               <div class="chip-row">${statusChips}</div>
