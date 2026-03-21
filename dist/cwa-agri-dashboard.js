@@ -150,17 +150,28 @@ class CwaAgriReportCard extends HTMLElement {
           <section>
             <h3>7 天預報</h3>
             <div class="muted trend">${this._esc(trend)}</div>
-            <div class="forecast-grid header">
-              <div>項目</div>
-              ${weekly.map((d) => `<div>${this._esc(this._fmtDate(d.date))}</div>`).join('')}
+            <div class="forecast-table-wrap">
+              <div class="forecast-grid header">
+                <div>項目</div>
+                ${weekly.map((d) => `<div>${this._esc(this._fmtDate(d.date))}</div>`).join('')}
+              </div>
+              <div class="forecast-grid">
+                <div>天氣</div>
+                ${weekly.map((d) => `<div>${this._weatherIcon(d.weather)} ${this._esc(d.weather || '-')}</div>`).join('')}
+              </div>
+              <div class="forecast-grid">
+                <div>溫度</div>
+                ${weekly.map((d) => `<div>${this._esc(d.minT)}~${this._esc(d.maxT)}°C</div>`).join('')}
+              </div>
             </div>
-            <div class="forecast-grid">
-              <div>天氣</div>
-              ${weekly.map((d) => `<div>${this._weatherIcon(d.weather)} ${this._esc(d.weather || '-')}</div>`).join('')}
-            </div>
-            <div class="forecast-grid">
-              <div>溫度</div>
-              ${weekly.map((d) => `<div>${this._esc(d.minT)}~${this._esc(d.maxT)}°C</div>`).join('')}
+            <div class="forecast-list mobile-only">
+              ${weekly.map((d) => `
+                <div class="forecast-item">
+                  <div class="forecast-item-date">${this._esc(this._fmtDate(d.date))}</div>
+                  <div>${this._weatherIcon(d.weather)} ${this._esc(d.weather || '-')}</div>
+                  <div>${this._esc(d.minT)}~${this._esc(d.maxT)}°C</div>
+                </div>
+              `).join('')}
             </div>
           </section>
 
@@ -192,15 +203,23 @@ class CwaAgriReportCard extends HTMLElement {
         h3 { margin: 0 0 8px; font-size: 1rem; }
         ul { margin: 0; padding-left: 18px; }
         li { margin: 4px 0; }
-        .forecast-grid { display:grid; grid-template-columns: 72px repeat(${Math.max(weekly.length,1)}, minmax(0,1fr)); gap: 6px; font-size: .9rem; margin-top: 6px; }
+        .forecast-table-wrap { overflow-x: auto; padding-bottom: 4px; }
+        .forecast-grid { display:grid; grid-template-columns: 72px repeat(${Math.max(weekly.length,1)}, minmax(88px,1fr)); gap: 6px; font-size: .9rem; margin-top: 6px; min-width: fit-content; }
         .forecast-grid > div { padding: 6px 4px; border-radius: 8px; background: var(--secondary-background-color); text-align:center; }
         .forecast-grid > div:first-child { font-weight: 700; }
         .forecast-grid.header > div { background: transparent; font-weight: 700; }
+        .forecast-list { display: none; }
+        .forecast-item { padding: 10px 12px; border-radius: 10px; background: var(--secondary-background-color); margin-top: 8px; }
+        .forecast-item-date { font-weight: 700; margin-bottom: 4px; }
         .trend { margin-bottom: 8px; }
         .note { margin-top: 18px; font-size: .82rem; color: var(--secondary-text-color); }
         .note-title { font-weight: 700; margin-bottom: 4px; }
         .footer { margin-top: 18px; font-size: .8rem; }
         .pad { padding: 16px; }
+        @media (max-width: 640px) {
+          .forecast-table-wrap { display: none; }
+          .forecast-list.mobile-only { display: block; }
+        }
       `;
       this.appendChild(style);
       this._styled = true;

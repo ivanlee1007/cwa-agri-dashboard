@@ -12,7 +12,7 @@ This card is designed for the entity pushed by the OpenClaw CWA skill, typically
 - Operation guidance
 - 3-day action window
 - Weekly focus / highest-risk-day / management advice
-- 7-day forecast table
+- 7-day forecast responsive layout（桌面表格 / 窄版自動改列表）
 - Note section for rule-based monitoring items
 
 ## Install with HACS
@@ -25,6 +25,9 @@ This card is designed for the entity pushed by the OpenClaw CWA skill, typically
 4. Reload browser
 
 ## Lovelace usage
+
+> 建議直接使用這個 custom card，不要再用 Home Assistant 原生 Markdown card 來排 7 天預報表格；窄欄位或某些主題下，Markdown 表格容易變形。
+
 
 ### Minimal card
 
